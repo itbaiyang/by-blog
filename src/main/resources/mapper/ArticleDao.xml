@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.iseee.dao.ArticleDao">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <insert id="insertArticle" useGeneratedKeys="true" keyProperty="articleId" parameterType="cn.iseee.entity.Article">
+        INSERT ignore INTO article(name, create_time, content)
+        VALUES (#{name}, #{createTime}, #{content})
+    </insert>
+    <insert id="deleteArticle" parameterType="long">
+        DELETE FROM article
+        WHERE article_id = #{articleId}
+    </insert>
+
+    <update id="updateArticle" parameterType="cn.iseee.entity.Article">
+        UPDATE article
+        SET name=#{name},
+            create_time=#{createTime},
+            content=#{content}
+        WHERE article_id = #{articleId}
+    </update>
+
+    <select id="queryById" resultType="HashMap" parameterType="long">
+        select article_id, name, create_time, content
+        from article
+        where article_id = #{articleId}
+    </select>
+
+    <select id="queryAll" resultType="HashMap">
+        SELECT article_id, name, create_time, content
+        FROM article
+        ORDER BY create_time DESC
+        limit #{offset}, #{limit}
+    </select>
+    <select id="articleListCount" resultType="integer" statementType="CALLABLE">
+        select count(*) from article
+    </select>
+</mapper>
